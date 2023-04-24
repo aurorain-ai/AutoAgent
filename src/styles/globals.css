@@ -4,13 +4,15 @@
 
 /* Used for the background effect in the landing page */
 .background {
-  background-image: radial-gradient(
+  /* background-image: radial-gradient(
     circle,
     rgba(58, 58, 58, 0.75) 2px,
     transparent 0px
   );
   background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
+  background-position: 0 0, 15px 15px; */
+  /* remove dot but keep the same background color */
+  background-color: rgba(58, 58, 58, 0.75);
 }
 
 .lower-gradient {

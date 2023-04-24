@@ -144,20 +144,20 @@ const Home: NextPage = () => {
               className="relative flex flex-col items-center font-mono"
             >
               <div className="flex flex-row items-start shadow-2xl">
-                <span className="text-4xl font-bold text-[#C0C0C0] xs:text-5xl sm:text-6xl">
+                <span className="text-4xl font-bold text-[#007BFF] xs:text-5xl sm:text-6xl">
                   Data
                 </span>
                 <span className="text-4xl font-bold text-white xs:text-5xl sm:text-6xl">
                   GPT
                 </span>
                 <PopIn delay={0.5} className="sm:absolute sm:right-0 sm:top-2">
-                  <Badge>Beta 🚀</Badge>
+                  <Badge>Stealth</Badge>
                 </PopIn>
               </div>
               <div className="mt-1 text-center font-mono text-[0.7em] font-bold text-white">
                 <p>
                   {t(
-                    "Assemble, configure, and deploy autonomous AI Agents in your browser."
+                    "AI copilot for data analytics, data engineering, and ML science."
                   )}
                 </p>
               </div>

@@ -13,7 +13,7 @@ interface LayoutProps {
 const DefaultLayout = (props: LayoutProps) => {
   const [ t ] = useTranslation();
   const description =
-    t('Assemble, configure, and deploy autonomous AI Agents in your browser.');
+    t('AI copilot for data analytics, data engineering, and ML science.');
   return (
     <div
       className={clsx(
@@ -22,7 +22,7 @@ const DefaultLayout = (props: LayoutProps) => {
       )}
     >
       <Head>
-        <title>AgentGPT</title>
+        <title>DataGPT</title>
         <meta name="description" content={description} />
         <meta name="twitter:site" content="@AgentGPT" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -36,11 +36,11 @@ const DefaultLayout = (props: LayoutProps) => {
         <meta name="twitter:image:height" content="640" />
         <meta
           property="og:title"
-          content="AgentGPT: Autonomous AI in your browser 🤖"
+          content="DataGPT: Unifying big data and large ML models 🤖"
         />
         <meta
           property="og:description"
-          content="Assemble, configure, and deploy autonomous AI Agents in your browser."
+          content="AI copilot for data analytics, data engineering, and ML science."
         />
         <meta property="og:url" content="https://agentgpt.reworkd.ai/" />
         <meta

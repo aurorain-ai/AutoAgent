@@ -93,7 +93,7 @@ const Drawer = ({
       >
         <div className="flex flex-col gap-1 overflow-hidden">
           <div className="mb-2 flex justify-center gap-2">
-            My Agent(s)
+            Data Source(s)
             <button
               className={clsx(
                 showDrawer ? "-translate-x-2" : "translate-x-12",
@@ -120,14 +120,14 @@ const Drawer = ({
             {status === "unauthenticated" && (
               <div>
                 {t(
-                  "Sign in to be able to save agents and manage your account!"
+                  "Sign in to be able to configure data sources and manage your account!"
                 )}
               </div>
             )}
             {status === "authenticated" && userAgents.length === 0 && (
               <div>
                 {t(
-                  "You need to create and save your first agent before anything shows up here!"
+                  "You need to configure to connect a data source before anything shows up here!"
                 )}
               </div>
             )}
@@ -147,12 +147,12 @@ const Drawer = ({
           {env.NEXT_PUBLIC_FF_AUTH_ENABLED && (
             <AuthItem session={session} signIn={signIn} signOut={signOut} />
           )}
+          <DrawerItem icon={<FaCog />} text="Settings" onClick={showSettings} />
           <DrawerItem
             icon={<FaQuestionCircle />}
             text={t("Help")}
             onClick={showHelp}
           />
-          <DrawerItem icon={<FaCog />} text="Settings" onClick={showSettings} />
           <DrawerItem
             icon={<FaGithub />}
             text="GitHub"
