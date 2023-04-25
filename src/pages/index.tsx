@@ -1,3 +1,4 @@
+// home main page
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { type NextPage, type GetStaticProps } from "next";
@@ -68,7 +69,7 @@ const Home: NextPage = () => {
   const tasks = messages.filter((message) => message.type === "task");
 
   const disableDeployAgent =
-    agent != null || isEmptyOrBlank(name) || isEmptyOrBlank(goalInput);
+    agent != null || isEmptyOrBlank(goalInput);
 
   const handleNewGoal = () => {
     const agent = new AutonomousAgent(
@@ -163,33 +164,8 @@ const Home: NextPage = () => {
               </div>
             </div>
 
-            <Expand className="flex w-full flex-row">
-              <ChatWindow
-                className="sm:mt-4"
-                messages={messages}
-                title={session?.user.subscriptionId ? proTitle : "AgentGPT"}
-                showDonation={
-                  status != "loading" && !session?.user.subscriptionId
-                }
-                onSave={
-                  shouldShowSave
-                    ? (format) => {
-                        setHasSaved(true);
-                        agentUtils.saveAgent({
-                          goal: goalInput.trim(),
-                          name: name.trim(),
-                          tasks: messages,
-                        });
-                      }
-                    : undefined
-                }
-                scrollToBottom
-              />
-              {tasks.length > 0 && <TaskWindow tasks={tasks} />}
-            </Expand>
-
             <div className="flex w-full flex-col gap-2 sm:mt-4 md:mt-10">
-              <Expand delay={1.2}>
+              {/* <Expand delay={1.2}>
                 <Input
                   inputRef={nameInputRef}
                   left={
@@ -205,32 +181,32 @@ const Home: NextPage = () => {
                   placeholder="AgentGPT"
                   type="text"
                 />
-              </Expand>
-              <Expand delay={1.3}>
+              </Expand> */}
+              <Expand delay={1.2}>
                 <Input
-                  left={
-                    <>
-                      <FaStar />
-                      <span className="ml-2">{t("AGENT_GOAL")}</span>
-                    </>
-                  }
+                  // left={
+                  //   <>
+                  //     <FaStar />
+                  //     <span className="ml-2">{t("AGENT_GOAL")}</span>
+                  //   </>
+                  // }
                   disabled={agent != null}
                   value={goalInput}
                   onChange={(e) => setGoalInput(e.target.value)}
                   onKeyDown={(e) => handleKeyPress(e)}
-                  placeholder={`${t("Make the world a better place.")}`}
+                  placeholder={`${t("Query something from big data")}`}
                   type="textarea"
                 />
               </Expand>
             </div>
-            <Expand delay={1.4} className="flex gap-2">
+            <Expand delay={1.3} className="flex gap-2">
               <Button
                 disabled={disableDeployAgent}
                 onClick={handleNewGoal}
                 className="sm:mt-10"
               >
                 {agent == null ? (
-                  t("Deploy Agent")
+                  t("Run")
                 ) : (
                   <>
                     <VscLoading className="animate-spin" size={20} />
@@ -250,10 +226,36 @@ const Home: NextPage = () => {
                     <span className="ml-2">{t("Stopping")}</span>
                   </>
                 ) : (
-                  t("Stop Agent")
+                  t("Stop")
                 )}
               </Button>
             </Expand>
+
+            <Expand className="flex w-full flex-row">
+              <ChatWindow
+                className="sm:mt-4"
+                messages={messages}
+                title={session?.user.subscriptionId ? proTitle : "DataGPT"}
+                showDonation={ false
+                  // status != "loading" && !session?.user.subscriptionId
+                }
+                onSave={
+                  shouldShowSave
+                    ? (format) => {
+                        setHasSaved(true);
+                        agentUtils.saveAgent({
+                          goal: goalInput.trim(),
+                          name: name.trim(),
+                          tasks: messages,
+                        });
+                      }
+                    : undefined
+                }
+                scrollToBottom
+              />
+              {tasks.length > 0 && <TaskWindow tasks={tasks} />}
+            </Expand>
+
           </div>
         </div>
       </main>

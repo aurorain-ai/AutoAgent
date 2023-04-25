@@ -1,3 +1,4 @@
+// home default layout
 import { type ReactNode } from "react";
 import Head from "next/head";
 import DottedGridBackground from "../components/DottedGridBackground";

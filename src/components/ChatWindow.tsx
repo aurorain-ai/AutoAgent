@@ -1,8 +1,10 @@
+// home chat window
 import type { ReactNode } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 import {
   FaBrain,
+  FaCloud,
   FaClipboard,
   FaCopy,
   FaDatabase,
@@ -100,7 +102,7 @@ const ChatWindow = ({
               <ChatMessage
                 message={{
                   type: "system",
-                  value:t('> Create an agent by adding a name / goal, and hitting deploy!')
+                  value:'>'
                 }}
               />
             </Expand>
@@ -108,7 +110,7 @@ const ChatWindow = ({
               <ChatMessage
                 message={{
                   type: "system",
-                  value:`📢 ${t('YOU_CAN_PROVIDE_YOUR_OWN_OPENAI_KEY')}`
+                  value:'>'
                 }}
               />
               {showDonation && (
@@ -353,7 +355,7 @@ const getMessageIcon = (message: Message) => {
     case "task":
       return <FaListAlt className="text-gray-300" />;
     case "thinking":
-      return <FaBrain className="mt-[0.1em] text-pink-400" />;
+      return <FaCloud className="mt-[0.1em] text-pink-400" />;
     case "action":
       return <FaPlayCircle className="text-green-500" />;
   }
@@ -363,11 +365,11 @@ const getMessagePrefix = (message: Message) => {
   const [ t ] = useTranslation();
   switch (message.type) {
     case "goal":
-      return t('Embarking on a new goal:');
+      return 'Run:';
     case "task":
-      return t('Added task:')
+      return 'Update:';
     case "thinking":
-      return t('Thinking...');
+      return 'Running...';
     case "action":
       return message.info ? message.info : t('Executing:');
   }
