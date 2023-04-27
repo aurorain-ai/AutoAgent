@@ -106,12 +106,12 @@ const Home: NextPage = () => {
 
   const proTitle = (
     <>
-      AgentGPT<span className="ml-1 text-amber-500/90">Pro</span>
+      DataGPT<span className="ml-1 text-amber-500/90">Pro</span>
     </>
   );
 
   const shouldShowSave =
-    status === "authenticated" &&
+    (status === "authenticated" || true) &&
     !agent?.isRunning &&
     messages.length &&
     !hasSaved;
@@ -245,7 +245,8 @@ const Home: NextPage = () => {
                         setHasSaved(true);
                         agentUtils.saveAgent({
                           goal: goalInput.trim(),
-                          name: name.trim(),
+                          // name: name.trim(),
+                          name: goalInput.trim().substring(0, 6),
                           tasks: messages,
                         });
                       }
