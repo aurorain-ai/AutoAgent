@@ -94,7 +94,7 @@ const Drawer = ({
       >
         <div className="flex flex-col gap-1 overflow-hidden">
           <div className="mb-2 flex justify-center gap-2">
-            Data Source(s)
+            Saved Sessions
             <button
               className={clsx(
                 showDrawer ? "-translate-x-2" : "translate-x-12",
