@@ -16,7 +16,7 @@ async function startGoalAgent(modelSettings: ModelSettings, goal: string) {
   }).call({
     goal,
   });
-  console.log("Completion:" + (completion.text as string));
+  console.log("StartCompleted:" + (completion.text as string));
   return extractTasks(completion.text as string, []);
 }
 
@@ -33,6 +33,7 @@ async function executeTaskAgent(
     task,
   });
 
+  console.log("ExecuteCompleted:" + (completion.text as string));
   return completion.text as string;
 }
 
@@ -54,6 +55,7 @@ async function createTasksAgent(
     result,
   });
 
+  console.log("CreateCompleted:" + (completion.text as string));
   return extractTasks(completion.text as string, completedTasks || []);
 }
 

@@ -6,6 +6,7 @@
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env/server.mjs"));
 
 import nextI18NextConfig from './next-i18next.config.js'
+import withTM from 'next-transpile-modules';
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -18,4 +19,16 @@ const config = {
     return config;
   }
 };
-export default config;
+
+// add for Snowflake-SDK
+const transpileModules = [
+  'snowflake-sdk',
+  'vm2',
+  'pac-resolver',
+  'pac-proxy-agent',
+  'proxy-agent',
+  'urllib',
+];
+
+const extendedConfig = withTM(transpileModules)(config);
+export default extendedConfig;

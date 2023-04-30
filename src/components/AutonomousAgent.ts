@@ -14,6 +14,9 @@ import type { RequestBody } from "../utils/interfaces";
 
 const TIMEOUT_LONG = 1000;
 const TIMOUT_SHORT = 800;
+function sleep(milliseconds: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, milliseconds));
+}
 
 class AutonomousAgent {
   name: string;
@@ -51,9 +54,11 @@ class AutonomousAgent {
 
     // Initialize by getting tasks
     try {
+      // get the broken-down tasks
       this.tasks = await this.getInitialTasks();
+      // display task names only
       for (const task of this.tasks) {
-        await new Promise((r) => setTimeout(r, TIMOUT_SHORT));
+        await sleep(TIMOUT_SHORT);
         this.sendTaskMessage(task);
       }
     } catch (e) {
@@ -63,12 +68,13 @@ class AutonomousAgent {
       return;
     }
 
+    // take actions on tasks
     await this.loop();
   }
 
   async loop() {
     console.log(`Loop ${this.numLoops}`);
-    console.log(this.tasks);
+    console.log('tasks:', this.tasks);
 
     if (!this.isRunning) {
       return;
@@ -89,7 +95,7 @@ class AutonomousAgent {
     }
 
     // Wait before starting
-    await new Promise((r) => setTimeout(r, TIMEOUT_LONG));
+    await sleep(TIMEOUT_LONG);
 
     // Execute first task
     // Get and remove first task
@@ -101,7 +107,7 @@ class AutonomousAgent {
     this.sendExecutionMessage(currentTask as string, result);
 
     // Wait before adding tasks
-    await new Promise((r) => setTimeout(r, TIMEOUT_LONG));
+    await sleep(TIMEOUT_LONG);
     this.sendThinkingMessage();
 
     // Add new tasks
@@ -112,7 +118,7 @@ class AutonomousAgent {
       );
       this.tasks = this.tasks.concat(newTasks);
       for (const task of newTasks) {
-        await new Promise((r) => setTimeout(r, TIMOUT_SHORT));
+        await sleep(TIMOUT_SHORT);
         this.sendTaskMessage(task);
       }
 
@@ -142,7 +148,9 @@ class AutonomousAgent {
 
   async getInitialTasks(): Promise<string[]> {
     if (this.shouldRunClientSide()) {
+      console.info("getInitialTasks", "inside shouldRunClientSide");
       if (!env.NEXT_PUBLIC_FF_MOCK_MODE_ENABLED) {
+        console.info("getInitialTasks", "testConnection");
         await testConnection(this.modelSettings);
       }
       return await AgentService.startGoalAgent(this.modelSettings, this.goal);
@@ -153,6 +161,7 @@ class AutonomousAgent {
       goal: this.goal,
     };
     const res = await this.post(`/api/agent/start`, data);
+    console.info("getInitialTasks", "post(/api/agent/start)");
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
     return res.data.newTasks as string[];
