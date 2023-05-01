@@ -367,7 +367,7 @@ const getMessagePrefix = (message: Message) => {
     case "goal":
       return 'Run:';
     case "task":
-      return 'Update:';
+      return 'Result:';
     case "thinking":
       return 'Running...';
     case "action":

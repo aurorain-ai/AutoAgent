@@ -17,6 +17,12 @@ export const createModel = (settings: ModelSettings) => {
   });
 };
 
+export const snowflakeSQLPrompt = new PromptTemplate({
+  template:
+    "You are an autonomous Snowflake SQL AI called DataGPT. You have the following statement `{sql}`. Generate a SQL statement or correct it so that it can be used in Snowflake directly. Return the response as a SQL statement and NOTHING ELSE",
+  inputVariables: ["sql"],
+});
+
 export const startGoalPrompt = new PromptTemplate({
   template:
     "You are an autonomous task creation AI called DataGPT. You have the following objective `{goal}`. Create a list of zero to three tasks to be completed by your AI system such that your goal is more closely reached or completely reached. Return the response as an array of strings that can be used in JSON.parse()",

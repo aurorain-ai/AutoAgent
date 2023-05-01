@@ -3,11 +3,23 @@ import {
   startGoalPrompt,
   executeTaskPrompt,
   createTasksPrompt,
+  snowflakeSQLPrompt,
 } from "../utils/prompts";
 import type { ModelSettings } from "../utils/types";
 import { env } from "../env/client.mjs";
 import { LLMChain } from "langchain/chains";
 import { extractTasks } from "../utils/helpers";
+
+async function sqlQueryAgent(modelSettings: ModelSettings, sql: string) {
+  const completion = await new LLMChain({
+    llm: createModel(modelSettings),
+    prompt: snowflakeSQLPrompt,
+  }).call({
+    sql,
+  });
+  console.log("sqlQueryAgent:" + (completion.text as string));
+  return completion.text as string;
+}
 
 async function startGoalAgent(modelSettings: ModelSettings, goal: string) {
   const completion = await new LLMChain({
@@ -60,6 +72,10 @@ async function createTasksAgent(
 }
 
 interface AgentService {
+  sqlQueryAgent: (
+    modelSettings: ModelSettings,
+    stmt: string
+  ) => Promise<string>;
   startGoalAgent: (
     modelSettings: ModelSettings,
     goal: string
@@ -80,12 +96,17 @@ interface AgentService {
 }
 
 const OpenAIAgentService: AgentService = {
+  sqlQueryAgent: sqlQueryAgent,
   startGoalAgent: startGoalAgent,
   executeTaskAgent: executeTaskAgent,
   createTasksAgent: createTasksAgent,
 };
 
 const MockAgentService: AgentService = {
+  sqlQueryAgent: async (modelSettings, stmt) => {
+    return await new Promise((resolve) => resolve("select"));
+  },
+
   startGoalAgent: async (modelSettings, goal) => {
     return await new Promise((resolve) => resolve(["Task 1"]));
   },

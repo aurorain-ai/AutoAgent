@@ -52,24 +52,34 @@ class AutonomousAgent {
     this.sendGoalMessage();
     this.sendThinkingMessage();
 
-    // Initialize by getting tasks
     try {
-      // get the broken-down tasks
-      this.tasks = await this.getInitialTasks();
-      // display task names only
-      for (const task of this.tasks) {
-        await sleep(TIMOUT_SHORT);
-        this.sendTaskMessage(task);
-      }
+      const result = await this.queryDatastore();
+      this.sendTaskMessage(result);
     } catch (e) {
       console.log(e);
       this.sendErrorMessage(getMessageFromError(e));
-      this.shutdown();
-      return;
     }
+    this.stopAgentSliently();
 
-    // take actions on tasks
-    await this.loop();
+    // Comment out auto agents
+    // // Initialize by getting tasks
+    // try {
+    //   // get the broken-down tasks
+    //   this.tasks = await this.getInitialTasks();
+    //   // display task names only
+    //   for (const task of this.tasks) {
+    //     await sleep(TIMOUT_SHORT);
+    //     this.sendTaskMessage(task);
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    //   this.sendErrorMessage(getMessageFromError(e));
+    //   this.shutdown();
+    //   return;
+    // }
+
+    // // take actions on tasks
+    // await this.loop();
   }
 
   async loop() {
@@ -144,6 +154,18 @@ class AutonomousAgent {
     return !!this.modelSettings.customApiKey
       ? this.modelSettings.customMaxLoops || DEFAULT_MAX_LOOPS_CUSTOM_API_KEY
       : defaultLoops;
+  }
+
+  async queryDatastore(): Promise<string> {
+    const data = {
+      modelSettings: this.modelSettings,
+      goal: this.goal,
+    };
+    const res = await this.post(`/api/agent/start`, data);
+    console.info("queryDatastore result:", res.data.data[0] ?? "");
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
+    return JSON.stringify(res.data.data[0]) as string;
   }
 
   async getInitialTasks(): Promise<string[]> {
@@ -230,6 +252,12 @@ class AutonomousAgent {
 
   private shouldRunClientSide() {
     return !!this.modelSettings.customApiKey;
+  }
+
+  stopAgentSliently() {
+    this.isRunning = false;
+    this.shutdown();
+    return;
   }
 
   stopAgent() {
