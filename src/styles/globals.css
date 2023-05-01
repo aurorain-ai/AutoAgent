@@ -37,8 +37,13 @@ pre {
   @apply h-[14em] overflow-y-auto overflow-x-hidden sm-h:h-[17em] md-h:h-[22em] lg-h:h-[30em];
 }
 
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
 table {
-  @apply w-full rounded-lg text-white;
+  @apply w-full rounded-lg text-sm text-white;
   background-color: #0d1117;
 }
 

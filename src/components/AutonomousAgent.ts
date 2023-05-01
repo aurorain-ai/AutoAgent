@@ -56,7 +56,7 @@ class AutonomousAgent {
       const data = await this.queryDatastore();
 
       this.sendSqlMessage(data.sql);
-      this.sendTaskMessage(JSON.stringify(data.result));
+      this.sendSqlTableMessage(data.result);
     } catch (e) {
       console.log(e);
       this.sendErrorMessage(getMessageFromError(e));
@@ -309,6 +309,10 @@ class AutonomousAgent {
 
   sendSqlMessage(sql: string) {
     this.sendMessage({ type: "sql", value: sql });
+  }
+
+  sendSqlTableMessage(data: any) {
+    this.sendMessage({ type: "sqltable", value: "", table: data });
   }
 
   sendTaskMessage(task: string) {

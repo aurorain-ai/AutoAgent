@@ -28,6 +28,7 @@ import PDFButton from "./pdf/PDFButton";
 import FadeIn from "./motions/FadeIn";
 import Menu from "./Menu";
 import type { Message } from "../types/agentTypes";
+import { TableRow } from '../types/tableRow';
 import clsx from "clsx";
 
 interface ChatWindowProps extends HeaderProps {
@@ -268,6 +269,8 @@ const ChatMessage = ({ message }: { message: Message }) => {
     };
   }, [copied]);
 
+  const tableData: TableRow[] = message.type === "sqltable" ? (message.table as TableRow[]) : [];
+
   return (
     <div
       className="mx-2 my-1 rounded-lg border-[2px] border-white/10 bg-white/20 p-1 font-mono text-sm hover:border-[#1E88E5]/40 sm:mx-4 sm:p-3 sm:text-base"
@@ -302,6 +305,29 @@ const ChatMessage = ({ message }: { message: Message }) => {
         </div>
       ) : (
         <span>{message.value}</span>
+      )}
+
+      {message.type == "sqltable" && tableData.length > 0 && (
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+              {Object.keys(tableData[0] as object).map((key) => (
+                  <th key={key}>{key}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((row, index) => (
+                <tr key={index}>
+                  {Object.values(row).map((value, i) => (
+                    <td key={i}>{value}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <div className="relative">
@@ -356,6 +382,8 @@ const getMessageIcon = (message: Message) => {
       return <FaListAlt className="text-gray-300" />;
     case "sql":
       return <FaListAlt className="text-gray-300" />;
+    case "sqltable":
+      return <FaListAlt className="text-gray-300" />;
     case "thinking":
       return <FaCloud className="mt-[0.1em] text-pink-400" />;
     case "action":
@@ -369,9 +397,11 @@ const getMessagePrefix = (message: Message) => {
     case "goal":
       return 'Run:';
     case "task":
-      return 'Result:';
+      return 'Task:';
     case "sql":
       return 'SQL:';
+    case "sqltable":
+      return 'Data:';
     case "thinking":
       return 'Running...';
     case "action":
