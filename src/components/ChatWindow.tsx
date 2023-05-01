@@ -307,7 +307,7 @@ const ChatMessage = ({ message }: { message: Message }) => {
       <div className="relative">
         {copied ? (
           <span className="absolute bottom-0 right-0 rounded-full border-2 border-white/30 bg-zinc-800 p-1 px-2 text-gray-300">
-            `${t('COPIED')}`
+            {t('COPIED')}
           </span>
         ) : (
           <span
@@ -354,6 +354,8 @@ const getMessageIcon = (message: Message) => {
       return <FaStar className="text-yellow-300" />;
     case "task":
       return <FaListAlt className="text-gray-300" />;
+    case "sql":
+      return <FaListAlt className="text-gray-300" />;
     case "thinking":
       return <FaCloud className="mt-[0.1em] text-pink-400" />;
     case "action":
@@ -368,6 +370,8 @@ const getMessagePrefix = (message: Message) => {
       return 'Run:';
     case "task":
       return 'Result:';
+    case "sql":
+      return 'SQL:';
     case "thinking":
       return 'Running...';
     case "action":

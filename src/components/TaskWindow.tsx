@@ -1,3 +1,6 @@
+// display on the right side of main page through
+// { {tasks.length > 0 && <TaskWindow tasks={tasks} />} }
+// by index.tsx
 import React from "react";
 import { FaListAlt } from "react-icons/fa";
 import FadeIn from "./motions/FadeIn";

@@ -26,14 +26,17 @@ const handler = async (request: NextRequest) => {
     const data = await querySnowflakeAPI(sqlStmt);
     console.log("querySnowflakeAPI:", data);
 
-    return NextResponse.json({ data });
+    return NextResponse.json({
+      sql: sqlStmt,
+      result: data,
+    });
   } catch (err) {
     console.error('Error executing query:', err);
   }
   return NextResponse.error();
 
 
-  // // Default start function
+  // // Default start handler for src/components/AutonomousAgent.ts/AutonomousAgent.getInitialTasks
   // try {
   //   const { modelSettings, goal } = (await request.json()) as RequestBody;
   //   const newTasks = await AgentService.startGoalAgent(modelSettings, goal);

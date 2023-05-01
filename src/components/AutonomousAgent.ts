@@ -53,8 +53,10 @@ class AutonomousAgent {
     this.sendThinkingMessage();
 
     try {
-      const result = await this.queryDatastore();
-      this.sendTaskMessage(result);
+      const data = await this.queryDatastore();
+
+      this.sendSqlMessage(data.sql);
+      this.sendTaskMessage(JSON.stringify(data.result));
     } catch (e) {
       console.log(e);
       this.sendErrorMessage(getMessageFromError(e));
@@ -156,16 +158,17 @@ class AutonomousAgent {
       : defaultLoops;
   }
 
-  async queryDatastore(): Promise<string> {
+  async queryDatastore(): Promise<any> {
     const data = {
       modelSettings: this.modelSettings,
       goal: this.goal,
     };
     const res = await this.post(`/api/agent/start`, data);
-    console.info("queryDatastore result:", res.data.data[0] ?? "");
+    console.info("queryDatastore sql:", res.data.sql ?? "");
+    // console.info("queryDatastore result:", res.data.result ?? "");
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
-    return JSON.stringify(res.data.data[0]) as string;
+    return res.data;
   }
 
   async getInitialTasks(): Promise<string[]> {
@@ -302,6 +305,10 @@ class AutonomousAgent {
 
   sendThinkingMessage() {
     this.sendMessage({ type: "thinking", value: "" });
+  }
+
+  sendSqlMessage(sql: string) {
+    this.sendMessage({ type: "sql", value: sql });
   }
 
   sendTaskMessage(task: string) {
