@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/reworkd/AgentGPT/main/public/banner.png?token=GHSAT0AAAAAAB7JND3U3VGGF3UYYHGYO4RAZBSDJAQ" height="300"/>
+  <img src="https://github.com/aurorain-ai/DataGPT/blob/3a1afa1fefa5784a41243e2ebfc5c0971cd842f7/public/DataGPT.png" height="100"/>
 </p>
 <p align="center">
   <em>🤖 AI copilot for data analytics, data engineering, and ML science. 🤖 </em>
