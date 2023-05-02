@@ -25,13 +25,13 @@ const DefaultLayout = (props: LayoutProps) => {
       <Head>
         <title>DataGPT</title>
         <meta name="description" content={description} />
-        <meta name="twitter:site" content="@AgentGPT" />
+        <meta name="twitter:site" content="@luhuihu" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="AgentGPT 🤖" />
+        <meta name="twitter:title" content="DataGPT" />
         <meta name="twitter:description" content={description} />
         <meta
           name="twitter:image"
-          content="https://agentgpt.reworkd.ai/banner.png"
+          content="https://github.com/aurorain-ai/DataGPT/blob/3a1afa1fefa5784a41243e2ebfc5c0971cd842f7/public/DataGPT.png"
         />
         <meta name="twitter:image:width" content="1280" />
         <meta name="twitter:image:height" content="640" />
@@ -46,7 +46,7 @@ const DefaultLayout = (props: LayoutProps) => {
         <meta property="og:url" content="https://agentgpt.reworkd.ai/" />
         <meta
           property="og:image"
-          content="https://agentgpt.reworkd.ai/banner.png"
+          content="https://github.com/aurorain-ai/DataGPT/blob/3a1afa1fefa5784a41243e2ebfc5c0971cd842f7/public/DataGPT.png"
         />
         <meta property="og:image:width" content="1280" />
         <meta property="og:image:height" content="640" />
@@ -55,7 +55,7 @@ const DefaultLayout = (props: LayoutProps) => {
           name="google-site-verification"
           content="sG4QDkC8g2oxKSopgJdIe2hQ_SaJDaEaBjwCXZNkNWA"
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/day1.ico" />
       </Head>
       <DottedGridBackground
         className={clsx("min-w-screen min-h-screen", props.className)}
