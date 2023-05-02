@@ -164,7 +164,7 @@ const Home: NextPage = () => {
               </div>
             </div>
 
-            <div className="flex w-full flex-col gap-2 sm:mt-4 md:mt-10">
+            <div className="flex w-full flex-col gap-1 sm:mt-2 md:mt-8">
               {/* <Expand delay={1.2}>
                 <Input
                   inputRef={nameInputRef}
@@ -199,7 +199,7 @@ const Home: NextPage = () => {
                 />
               </Expand>
             </div>
-            <Expand delay={1.3} className="flex gap-2">
+            <Expand delay={1.3} className="flex gap-2 -mt-5">
               <Button
                 disabled={disableDeployAgent}
                 onClick={handleNewGoal}
