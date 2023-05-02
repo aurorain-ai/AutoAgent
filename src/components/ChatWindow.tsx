@@ -82,7 +82,7 @@ const ChatWindow = ({
       <MacWindowHeader title={title} messages={messages} onSave={onSave} />
       <div
         className={clsx(
-          "mb-2 mr-2 ",
+          "mb-1 mr-1 ",
           (fullscreen && "max-h-[75vh] flex-grow overflow-auto") ||
             "window-heights"
         )}
