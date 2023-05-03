@@ -1,4 +1,5 @@
 import * as snowflake from "snowflake-sdk";
+import { SnowflakeError } from "snowflake-sdk";
 import { Request, Response } from 'express';
 
 
@@ -21,21 +22,47 @@ connection.connect((err) => {
   }
 });
 
-// Function to execute Snowflake query
-export async function querySnowflake(sqlText: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    connection.execute({
-      sqlText,
-      complete: (err, stmt, rows) => {
-        if (err) {
-          console.error("Failed to execute Snowflake:", err);
-          reject(err);
-        } else {
-          console.log("Successfully executed Snowflake.");
-          resolve(rows);
-        }
-      },
+async function reconnect(connection: snowflake.Connection) {
+  return new Promise<void>((resolve, reject) => {
+    connection.connect((err) => {
+      if (err) {
+        console.error('Failed to reconnect Snowflake:', err);
+        reject(err);
+      } else {
+        console.log('Reconnected Snowflake successfully.');
+        resolve();
+      }
     });
+  });
+}
+
+export async function querySnowflake(sqlText: string): Promise<any> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      connection.execute({
+        sqlText,
+        complete: (err, stmt, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        },
+      });
+    } catch (error) {
+      const snowflakeError = error as SnowflakeError;
+      if (snowflakeError.code === 407002 && snowflakeError.isFatal) {
+        console.error('Connection terminated. Attempting to reconnect...');
+        try {
+          await reconnect(connection);
+          resolve(await querySnowflake(sqlText));
+        } catch (reconnectError) {
+          reject(reconnectError);
+        }
+      } else {
+        reject(error);
+      }
+    }
   });
 }
 
