@@ -36,7 +36,7 @@ async function reconnect(connection: snowflake.Connection) {
   });
 }
 
-export async function querySnowflake(sqlText: string): Promise<any> {
+export async function querySnowflake(sqlText: string, retryCount: number = 0): Promise<any> {
   return new Promise(async (resolve, reject) => {
     connection.execute({
       sqlText,
@@ -46,11 +46,11 @@ export async function querySnowflake(sqlText: string): Promise<any> {
           console.error('querySnowflake error:', err);
           // 407001: a connection was never established.
           // 407002: a connection was disconnected.
-          if (snowflakeError.code === 407002 || snowflakeError.code === 407001) {
+          if ((snowflakeError.code === 407002 || snowflakeError.code === 407001) && retryCount < 3) {
             console.error('Connection terminated. Attempting to reconnect...');
             try {
               await reconnect(connection);
-              resolve(await querySnowflake(sqlText));
+              resolve(await querySnowflake(sqlText, retryCount + 1));
             } catch (reconnectError) {
               reject(reconnectError);
             }
