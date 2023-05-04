@@ -21,7 +21,7 @@ export const createModel = (settings: ModelSettings) => {
 
 export const snowflakeSQLPrompt = new PromptTemplate({
   template:
-    "You are a Snowflake AI called DataGPT. You have the following statement `{sql}`. Generate a SQL statement or correct it so that it can be used in Snowflake directly. Return the response as a SQL statement and NOTHING ELSE",
+    "You are a Snowflake AI called DataGPT. You have the following statement: `{sql}`. Generate a SQL statement or correct it so that it can be used in Snowflake directly. Return the response as a SQL statement and NOTHING ELSE",
   inputVariables: ["sql"],
 });
 
