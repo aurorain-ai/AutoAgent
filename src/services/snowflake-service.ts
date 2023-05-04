@@ -9,7 +9,6 @@ export async function querySnowflakeAPI(sqlText: string): Promise<any> {
       headers: { 'Content-Type': 'application/json' },
     });
     const data = await snowflakeResponse.json();
-    console.warn('querySnowflakeAPI Result:', data);
     return data;
   } catch (err) {
     console.error('querySnowflakeAPI Error:', err);

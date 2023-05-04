@@ -6,7 +6,7 @@ FROM SNOWFLAKE_SAMPLE_DATA.INFORMATION_SCHEMA.COLUMNS
 WHERE table_schema = 'TPCH_SF1'
 GROUP BY table_name;
 
--- Results:
+-- Results can be cached for LLM:
 const TableColumns = "
 [
   {

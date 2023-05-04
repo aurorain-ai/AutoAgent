@@ -27,12 +27,16 @@ export const snowflakeSQLPrompt = new PromptTemplate({
 
 export const snowflakeCachePrompt = new PromptTemplate({
   template:
-    "You are a Snowflake AI called DataGPT. You have the following statement: `{sql}`. Please create a syntactically correct query or correct it to be able to run directly on Snowflake and check column and table names correctly as defined below. Return the response as a SQL statement and NOTHING ELSE. Below are Snowflake database tables and their columns: `{cache}`",
+    "You are a Snowflake AI called DataGPT. You have the following statement: `{sql}`. Generate a syntactically correct query or correct it to be able to run directly on Snowflake and check column and table names correctly as defined below. Return the response as a SQL statement and NOTHING ELSE. Below are Snowflake database table catalog, table schema, table names and their columns: `{cache}`",
   inputVariables: ["sql", "cache"],
 });
 
 export const cachedTables = `
   [
+    {
+      TABLE_CATALOG: 'SNOWFLAKE_SAMPLE_DATA',
+      TABLE_SCHEMA: 'TPCH_SF1',
+    },
     {
       TABLE_NAME: 'PARTSUPP',
       COLUMNS: 'PS_AVAILQTY, PS_COMMENT, PS_PARTKEY, PS_SUPPKEY, PS_SUPPLYCOST'
