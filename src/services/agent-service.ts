@@ -4,6 +4,8 @@ import {
   executeTaskPrompt,
   createTasksPrompt,
   snowflakeSQLPrompt,
+  snowflakeCachePrompt,
+  cachedTables as cache,
 } from "../utils/prompts";
 import type { ModelSettings } from "../utils/types";
 import { env } from "../env/client.mjs";
@@ -13,9 +15,10 @@ import { extractTasks } from "../utils/helpers";
 async function sqlQueryAgent(modelSettings: ModelSettings, sql: string) {
   const completion = await new LLMChain({
     llm: createModel(modelSettings),
-    prompt: snowflakeSQLPrompt,
+    prompt: snowflakeCachePrompt,
   }).call({
     sql,
+    cache,
   });
   console.log("sqlQueryAgent:" + (completion.text as string));
   return completion.text as string;

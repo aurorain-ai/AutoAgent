@@ -25,6 +25,45 @@ export const snowflakeSQLPrompt = new PromptTemplate({
   inputVariables: ["sql"],
 });
 
+export const snowflakeCachePrompt = new PromptTemplate({
+  template:
+    "You are a Snowflake AI called DataGPT. You have the following statement: `{sql}`. Please create a syntactically correct query or correct it to be able to run directly on Snowflake and check column and table names correctly as defined below. Return the response as a SQL statement and NOTHING ELSE. Below are Snowflake database tables and their columns: `{cache}`",
+  inputVariables: ["sql", "cache"],
+});
+
+export const cachedTables = `
+  [
+    {
+      TABLE_NAME: 'PARTSUPP',
+      COLUMNS: 'PS_AVAILQTY, PS_COMMENT, PS_PARTKEY, PS_SUPPKEY, PS_SUPPLYCOST'
+    },
+    {
+      TABLE_NAME: 'ORDERS',
+      COLUMNS: 'O_CLERK, O_COMMENT, O_CUSTKEY, O_ORDERDATE, O_ORDERKEY, O_ORDERPRIORITY, O_ORDERSTATUS, O_SHIPPRIORITY, O_TOTALPRICE'
+    },
+    {
+      TABLE_NAME: 'LINEITEM',
+      COLUMNS: 'L_COMMENT, L_COMMITDATE, L_DISCOUNT, L_EXTENDEDPRICE, L_LINENUMBER, L_LINESTATUS, L_ORDERKEY, L_PARTKEY, L_QUANTITY, L_RECEIPTDATE, L_RETURNFLAG, L_SHIPDATE, L_SHIPINSTRUCT, L_SHIPMODE, L_SUPPKEY, L_TAX'
+    },
+    {
+      TABLE_NAME: 'NATION',
+      COLUMNS: 'N_COMMENT, N_NAME, N_NATIONKEY, N_REGIONKEY'
+    },
+    {
+      TABLE_NAME: 'CUSTOMER',
+      COLUMNS: 'C_ACCTBAL, C_ADDRESS, C_COMMENT, C_CUSTKEY, C_MKTSEGMENT, C_NAME, C_NATIONKEY, C_PHONE'
+    },
+    {
+      TABLE_NAME: 'SUPPLIER',
+      COLUMNS: 'S_ACCTBAL, S_ADDRESS, S_COMMENT, S_NAME, S_NATIONKEY, S_PHONE, S_SUPPKEY'
+    },
+    { TABLE_NAME: 'REGION', COLUMNS: 'R_COMMENT, R_NAME, R_REGIONKEY' },
+    {
+      TABLE_NAME: 'PART',
+      COLUMNS: 'P_BRAND, P_COMMENT, P_CONTAINER, P_MFGR, P_NAME, P_PARTKEY, P_RETAILPRICE, P_SIZE, P_TYPE'
+    }
+  ]`;
+
 export const startGoalPrompt = new PromptTemplate({
   template:
     "You are an autonomous task creation AI called DataGPT. You have the following objective `{goal}`. Create a list of zero to three tasks to be completed by your AI system such that your goal is more closely reached or completely reached. Return the response as an array of strings that can be used in JSON.parse()",
