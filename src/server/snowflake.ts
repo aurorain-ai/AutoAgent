@@ -13,23 +13,32 @@ const connectionConfig = {
   schema: process.env.SNOWFLAKE_SCHEMA ?? '',
 };
 
-const connection = snowflake.createConnection(connectionConfig);
-connection.connect((err) => {
-  if (err) {
-    console.error("Unable to connect to Snowflake:", err);
-  } else {
-    console.log("Successfully connected to Snowflake.");
-  }
-});
+let connection: snowflake.Connection;
 
-async function reconnect(connection: snowflake.Connection) {
+function createConnection() {
+  const newConnection = snowflake.createConnection(connectionConfig);
+  newConnection.connect((err) => {
+    if (err) {
+      console.error("Unable to connect to Snowflake:", err);
+    } else {
+      console.log("Successfully connected to Snowflake.");
+    }
+  });
+  return newConnection;
+}
+
+connection = createConnection();
+
+async function reconnect() {
   return new Promise<void>((resolve, reject) => {
-    connection.connect((err) => {
+    const newConnection = createConnection();
+    newConnection.connect((err) => {
       if (err) {
         console.error('Failed to reconnect Snowflake:', err);
         reject(err);
       } else {
         console.log('Reconnected Snowflake successfully.');
+        connection = newConnection;
         resolve();
       }
     });
@@ -49,7 +58,7 @@ export async function querySnowflake(sqlText: string, retryCount: number = 0): P
           if ((snowflakeError.code === 407002 || snowflakeError.code === 407001) && retryCount < 3) {
             console.error('Connection terminated. Attempting to reconnect...');
             try {
-              await reconnect(connection);
+              await reconnect();
               resolve(await querySnowflake(sqlText, retryCount + 1));
             } catch (reconnectError) {
               reject(reconnectError);
