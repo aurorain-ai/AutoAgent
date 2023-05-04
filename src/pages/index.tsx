@@ -155,7 +155,7 @@ const Home: NextPage = () => {
                   <Badge>Stealth</Badge>
                 </PopIn>
               </div>
-              <div className="mt-1 text-center font-mono text-[0.7em] font-bold text-white">
+              <div className="mt-1 text-center font-mono text-[0.7em] text-white">
                 <p>
                   {t(
                     "AI copilot for data analytics, data engineering, and ML science."

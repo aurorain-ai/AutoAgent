@@ -292,7 +292,7 @@ class AutonomousAgent {
   sendManualShutdownMessage() {
     this.sendMessage({
       type: "system",
-      value: `The agent has been manually shutdown.`,
+      value: `The copilot has been manually shutdown.`,
     });
   }
 
