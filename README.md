@@ -13,22 +13,6 @@
 
 ---
 
-<h2 align="center">
-💝 Support the Advancement of AgentGPT!! 💝
-</h2>
-
-<p align="center">
-Join us in fueling the development of AgentGPT, an open-source project pushing the boundaries of AI autonomy! We're facing challenges in covering the operational costs 💸, including in-house API and other infrastructure expenses, which is projected to grow to around $1000 USD per day 💳🤕 Your sponsorship would drive progress by helping us scale up resources, enhance features and functionality, and continue to iterate on this exciting project! 🚀
-</p>
-
-<p align="center">
-By sponsoring this free, open-source project, you not only have the opportunity to have your avatar/logo featured below, but also get the exclusive chance to chat with the founders!🗣️
-</p>
-
-<p align="center">
-<a href="https://github.com/sponsors/reworkd-admin">👉 Click here</a> to support the project
-</p>
-
 </div>
 
 ---
@@ -90,14 +74,14 @@ use the provided setup script.
 git clone git@github.com:aurorain-ai/DataGPT.git
 ```
 
-3. Install dependencies:
+2. Install dependencies:
 
 ```bash
 cd DataGPT
 npm install
 ```
 
-4. Create a **.env** file with the following content:
+3. Create a **.env** file with the following content:
 
 > 🚧 The environment variables must match the following [schema](https://github.com/aurorain-ai/DataGPT/blob/main/src/env/schema.mjs).
 
@@ -124,7 +108,7 @@ SNOWFLAKE_DATABASE=changeme
 SNOWFLAKE_SCHEMA=changeme
 ```
 
-5. Modify prisma schema to use sqlite:
+4. Modify prisma schema to use sqlite:
 
 ```bash
 ./prisma/useSqlite.sh
@@ -132,7 +116,7 @@ SNOWFLAKE_SCHEMA=changeme
 
 **Note:** This only needs to be done if you wish to use sqlite.
 
-6. Ready 🥳, now run:
+5. Ready 🥳, now run:
 
 ```bash
 # Create database migrations
