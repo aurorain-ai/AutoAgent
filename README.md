@@ -27,9 +27,8 @@ This platform is currently in alpha, we are currently working on:
 - Web browsing capabilities via LangChain 🌐
 - Interaction with websites and people 👨‍👩‍👦
 - Writing capabilities via a document API 📄
-- Saving agent runs 💾
+- Saving run sessions 💾
 - Users and authentication 🔐
-- Stripe integration for a lower limit paid version (So we can stop worrying about infra costs) 💵
 
 More Coming soon...
 
