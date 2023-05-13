@@ -9,13 +9,13 @@ export const createModel = (settings: ModelSettings) => {
     _settings = undefined;
   }
 
-  const modelname = _settings?.customModelName || GPT_35_TURBO;
+  const modelname = _settings?.customModelName || GPT_4;
   console.log("Connecting OpenAI model:", modelname);
   return new OpenAI({
     openAIApiKey: _settings?.customApiKey || process.env.OPENAI_API_KEY,
     temperature: _settings?.customTemperature || 0.9,
     modelName: modelname,
-    maxTokens: _settings?.maxTokens || 400,
+    maxTokens: _settings?.maxTokens || 800,
   });
 };
 

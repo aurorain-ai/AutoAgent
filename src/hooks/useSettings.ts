@@ -4,12 +4,13 @@ import {
   DEFAULT_MAX_LOOPS_CUSTOM_API_KEY,
   DEFAULT_MAX_LOOPS_FREE,
   GPT_35_TURBO,
+  GPT_4,
 } from "../utils/constants";
 
 const SETTINGS_KEY = "AGENTGPT_SETTINGS";
 const DEFAULT_SETTINGS: ModelSettings = {
   customApiKey: undefined,
-  customModelName: GPT_35_TURBO,
+  customModelName: GPT_4,
   customTemperature: 0.9,
   customMaxLoops: DEFAULT_MAX_LOOPS_FREE,
   maxTokens: 400,
