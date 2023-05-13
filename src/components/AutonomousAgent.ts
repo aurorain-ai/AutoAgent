@@ -362,7 +362,7 @@ const testConnection = async (modelSettings: ModelSettings) => {
 
 const getMessageFromError = (e: unknown) => {
   let message =
-    "ERROR accessing OpenAI APIs. Please check your API key or try again later";
+    "ERROR: Service is not available, please try again later";
   if (axios.isAxiosError(e)) {
     const axiosError = e;
     if (axiosError.response?.status === 429) {
