@@ -5,6 +5,7 @@ import {
   createTasksPrompt,
   snowflakeSQLPrompt,
   snowflakeCachePrompt,
+  snowflakeCacheTuningPrompt,
   cachedTables,
 } from "../utils/prompts";
 import type { ModelSettings } from "../utils/types";
@@ -14,18 +15,36 @@ import { extractTasks } from "../utils/helpers";
 import SchemaService from "../utils/schemas";
 
 
-async function sqlQueryAgent(modelSettings: ModelSettings, sql: string) {
+async function sqlQueryAgent(modelSettings: ModelSettings, sql: string, oldsql?: string, errmsg?: string, opstat?: string) {
   // TODO: cachedTables is hard-code, SchemaService is dynamic but not cached
   const cache = cachedTables ?? JSON.stringify(await SchemaService.getInstance().getSchema());
-  const completion = await new LLMChain({
-    llm: createModel(modelSettings),
-    prompt: snowflakeCachePrompt,
-  }).call({
-    sql,
-    cache,
-  });
-  console.log("sqlQueryAgent:" + (completion.text as string));
-  return completion.text as string;
+
+  var completion;
+  if (oldsql && errmsg) {
+    completion = await new LLMChain({
+      llm: createModel(modelSettings),
+      prompt: snowflakeCacheTuningPrompt,
+    }).call({
+      sql,
+      cache,
+      oldsql,
+      errmsg,
+      opstat,
+    });
+    console.log("sqlQueryAgent: finished fine-tuning");
+  }
+  else {
+    completion = await new LLMChain({
+      llm: createModel(modelSettings),
+      prompt: snowflakeCachePrompt,
+    }).call({
+      sql,
+      cache,
+    });
+  }
+
+  console.log("sqlQueryAgent:", completion);
+  return completion?.text as string;
 }
 
 async function startGoalAgent(modelSettings: ModelSettings, goal: string) {
@@ -81,7 +100,10 @@ async function createTasksAgent(
 interface AgentService {
   sqlQueryAgent: (
     modelSettings: ModelSettings,
-    stmt: string
+    sql: string,
+    oldsql?: string,
+    errmsg?: string,
+    opstat?: string
   ) => Promise<string>;
   startGoalAgent: (
     modelSettings: ModelSettings,

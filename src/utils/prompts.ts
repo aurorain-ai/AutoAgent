@@ -31,6 +31,12 @@ export const snowflakeCachePrompt = new PromptTemplate({
   inputVariables: ["sql", "cache"],
 });
 
+export const snowflakeCacheTuningPrompt = new PromptTemplate({
+  template:
+    "You are a Snowflake AI called DataGPT. You have the following statement: `{sql}`. But it is a fine-tuning second request because your previous SQL: `{oldsql}`, failed in Snowflake with errors: `{errmsg}`; and operation stats: `{opstat}`. Improve to create a syntactically correct query or correct it to be able to run directly on Snowflake and check column and table names correctly as defined below. Return the response as a SQL statement and NOTHING ELSE. Below are Snowflake database table catalog, schema, names, and their columns: `{cache}`",
+  inputVariables: ["sql", "cache", "oldsql", "errmsg", "opstat"],
+});
+
 export const cachedTables = `
   [
     // {
