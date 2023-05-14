@@ -8,9 +8,12 @@ export async function getQueryOperatorStats() : Promise<any> {
   console.log("lastQueryId: ", lastQueryId);
 
   // Step 2: Use the query ID to get the query operator stats
-  const operatorStatsQuery = `SELECT * FROM TABLE(get_query_operator_stats('${lastQueryId}'));`;
-  const operatorStatsResult = await querySnowflakeAPI(operatorStatsQuery);
-  console.log("get_query_operator_stats: ", operatorStatsResult);
+  var operatorStatsResult = "";
+  if (lastQueryId) {
+    const operatorStatsQuery = `SELECT * FROM TABLE(get_query_operator_stats('${lastQueryId}'));`;
+    operatorStatsResult = await querySnowflakeAPI(operatorStatsQuery);
+    console.log("get_query_operator_stats: ", operatorStatsResult);
+  }
 
   return operatorStatsResult;
 }

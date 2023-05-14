@@ -1,7 +1,11 @@
+// Note: The test cases here test both local and remote Snowflake APIs.
+// Please run "npm run test:custom" on another terminal before testing.
 import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { querySnowflake } from "../src/server/snowflake";
+import { querySnowflakeAPI } from '../src/services/snowflake-service';
+import { getQueryOperatorStats as getQueryOperatorStatsExt } from "../src/utils/query-opstats";
 
 
 async function testQuerySnowflake() {
@@ -28,6 +32,17 @@ async function getQueryOperatorStats() {
   console.log("get_query_operator_stats: ", operatorStatsResult);
 }
 
+async function testQuerySnowflakeExt() {
+  console.log('Snowflake: ext querying');
+  const results = await querySnowflakeAPI(
+    `SELECT EXTRACT(YEAR FROM O_ORDERDATE) AS OrderYear, COUNT(DISTINCT O_CUSTKEY) AS CustomerCount
+    FROM "SNOWFLAKE_SAMPLE_DATA"."TPCH_SF1"."ORDERS"
+    GROUP BY OrderYear
+    ORDER BY OrderYear;`
+  );
+  console.log('Snowflake ext query results:', results);
+}
+
 async function main() {
   try {
     console.log('Running testQuerySnowflake...');
@@ -37,6 +52,14 @@ async function main() {
     console.log('Running getQueryOperatorStats...');
     await getQueryOperatorStats();
     console.log('getQueryOperatorStats completed.');
+
+    console.log('Running testQuerySnowflakeExt...');
+    await testQuerySnowflakeExt();
+    console.log('testQuerySnowflakeExt completed.');
+
+    console.log('Running getQueryOperatorStatsExt...');
+    await getQueryOperatorStatsExt();
+    console.log('getQueryOperatorStatsExt completed.');
   } catch (error) {
     console.error("Error while executing tests:", error);
   }
