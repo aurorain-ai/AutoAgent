@@ -5,14 +5,18 @@ import {
   createTasksPrompt,
   snowflakeSQLPrompt,
   snowflakeCachePrompt,
-  cachedTables as cache,
+  cachedTables,
 } from "../utils/prompts";
 import type { ModelSettings } from "../utils/types";
 import { env } from "../env/client.mjs";
 import { LLMChain } from "langchain/chains";
 import { extractTasks } from "../utils/helpers";
+import SchemaService from "../utils/schemas";
+
 
 async function sqlQueryAgent(modelSettings: ModelSettings, sql: string) {
+  // TODO: cachedTables is hard-code, SchemaService is dynamic but not cached
+  const cache = cachedTables ?? JSON.stringify(await SchemaService.getInstance().getSchema());
   const completion = await new LLMChain({
     llm: createModel(modelSettings),
     prompt: snowflakeCachePrompt,
