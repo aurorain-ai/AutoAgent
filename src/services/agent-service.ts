@@ -6,6 +6,8 @@ import {
   snowflakeSQLPrompt,
   snowflakeCachePrompt,
   snowflakeCacheTuningPrompt,
+  snowflakeSQLTunePrompt0,
+  snowflakeSQLTunePrompt1,
   cachedTables,
 } from "../utils/prompts";
 import type { ModelSettings } from "../utils/types";
@@ -44,7 +46,37 @@ async function sqlQueryAgent(modelSettings: ModelSettings, sql: string, oldsql?:
   }
 
   console.log("sqlQueryAgent:", completion);
-  return completion?.text as string;
+  return completion.text as string;
+}
+
+async function sqlTuneAgent(modelSettings: ModelSettings, goal: string, pres?: string) {
+  // TODO: cachedTables is hard-code, SchemaService is dynamic but not cached
+  const cata = cachedTables ?? JSON.stringify(await SchemaService.getInstance().getSchema());
+
+  var completion;
+  if (pres) {
+    completion = await new LLMChain({
+      llm: createModel(modelSettings),
+      prompt: snowflakeSQLTunePrompt1,
+    }).call({
+      goal,
+      cata,
+      pres,
+    });
+    console.log("sqlTuneAgent: got fine-tuned SQL");
+  }
+  else {
+    completion = await new LLMChain({
+      llm: createModel(modelSettings),
+      prompt: snowflakeSQLTunePrompt0,
+    }).call({
+      goal,
+      cata,
+    });
+  }
+
+  console.log("sqlTuneAgent:", completion);
+  return JSON.parse(completion.text as string);
 }
 
 async function startGoalAgent(modelSettings: ModelSettings, goal: string) {
@@ -105,6 +137,11 @@ interface AgentService {
     errmsg?: string,
     opstat?: string
   ) => Promise<string>;
+  sqlTuneAgent: (
+    modelSettings: ModelSettings,
+    goal: string,
+    pres?: string
+  ) => Promise<any>;
   startGoalAgent: (
     modelSettings: ModelSettings,
     goal: string
@@ -126,6 +163,7 @@ interface AgentService {
 
 const OpenAIAgentService: AgentService = {
   sqlQueryAgent: sqlQueryAgent,
+  sqlTuneAgent: sqlTuneAgent,
   startGoalAgent: startGoalAgent,
   executeTaskAgent: executeTaskAgent,
   createTasksAgent: createTasksAgent,
@@ -133,6 +171,10 @@ const OpenAIAgentService: AgentService = {
 
 const MockAgentService: AgentService = {
   sqlQueryAgent: async (modelSettings, stmt) => {
+    return await new Promise((resolve) => resolve("select"));
+  },
+
+  sqlTuneAgent: async (modelSettings, goal) => {
     return await new Promise((resolve) => resolve("select"));
   },
 

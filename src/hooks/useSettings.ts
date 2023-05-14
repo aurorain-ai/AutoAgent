@@ -13,7 +13,7 @@ const DEFAULT_SETTINGS: ModelSettings = {
   customModelName: GPT_4,
   customTemperature: 0.9,
   customMaxLoops: DEFAULT_MAX_LOOPS_FREE,
-  maxTokens: 400,
+  maxTokens: 1000,
 };
 
 const loadSettings = () => {

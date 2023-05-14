@@ -5,6 +5,9 @@ import AgentService from "../../../services/agent-service";
 import { querySnowflakeAPI } from '../../../services/snowflake-service';
 import { getQueryOperatorStats } from "../../../utils/query-opstats";
 
+const MAX_TUNING: number = process.env.LLM_SQL_TUNING_MAX_TIMES && !isNaN(parseInt(process.env.LLM_SQL_TUNING_MAX_TIMES)) ? parseInt(process.env.LLM_SQL_TUNING_MAX_TIMES) : 3;
+const COMP_LEVEL_THRESHOLD: number = process.env.SQL_COMPLEXITY_LEVEL_THRESHOLD && !isNaN(parseInt(process.env.SQL_COMPLEXITY_LEVEL_THRESHOLD)) ? parseInt(process.env.SQL_COMPLEXITY_LEVEL_THRESHOLD) : 3;
+
 
 export const config = {
   runtime: "edge",
@@ -20,16 +23,28 @@ const handler = async (request: NextRequest) => {
     const { modelSettings, goal } = (await request.json()) as RequestBody;
     console.log("startHanlder statement:", goal);
 
-    // step 2: generate or correct from LLM
-    var sqlStmt = await AgentService.sqlQueryAgent(modelSettings, goal);
-    console.log("AgentService.sqlQueryAgent:", sqlStmt);
+    // step 2: fine-tune SQL for understanding ops
+    var num = 0;
+    var sqlStmt;
+    var pruning_result;
+    var comp_level = COMP_LEVEL_THRESHOLD;
+    while (num++ < MAX_TUNING && comp_level >= COMP_LEVEL_THRESHOLD) {
+      console.log("Running sqlTuneAgent: ", num);
+      const t_res = await AgentService.sqlTuneAgent(modelSettings, goal, pruning_result);
+      console.log("AgentService.sqlTuneAgent:", t_res);
+      sqlStmt = t_res.main_SQL;
+      comp_level = t_res.complexity_level;
+      if (comp_level >= COMP_LEVEL_THRESHOLD) {
+        console.log("sqlTuneAgent: query pruning_SQL: ", t_res.pruning_SQL);
+        pruning_result = await querySnowflakeAPI(t_res.pruning_SQL)
+      }
+    }
 
     // step 3: query snowflake
     var data = await querySnowflakeAPI(sqlStmt);
     console.log("querySnowflakeAPI return:", data);
 
-    // step 4: if failed, fine-tune SQL
-    // TODO: fine-tune for expensive ops
+    // step 4: Fine-tune SQL again for query failures
     if (data !== null && typeof data === 'object' && 'error' in data) {
       console.error("Fine-tuning for querySnowflakeAPI error: ", data.error);
 
@@ -60,15 +75,6 @@ const handler = async (request: NextRequest) => {
   }
   return NextResponse.error();
 
-
-  // // Default start handler for src/components/AutonomousAgent.ts/AutonomousAgent.getInitialTasks
-  // try {
-  //   const { modelSettings, goal } = (await request.json()) as RequestBody;
-  //   const newTasks = await AgentService.startGoalAgent(modelSettings, goal);
-  //   return NextResponse.json({ newTasks });
-  // } catch (e) {}
-
-  // return NextResponse.error();
 };
 
 export default handler;

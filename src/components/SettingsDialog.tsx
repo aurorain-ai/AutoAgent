@@ -120,7 +120,7 @@ export const SettingsDialog: React.FC<{
             <span className="ml-2">Tokens: </span>
           </>
         }
-        value={settings.maxTokens ?? 400}
+        value={settings.maxTokens ?? 1000}
         disabled={disabled}
         onChange={(e) =>
           updateSettings("maxTokens", parseFloat(e.target.value))

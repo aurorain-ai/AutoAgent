@@ -15,9 +15,21 @@ export const createModel = (settings: ModelSettings) => {
     openAIApiKey: _settings?.customApiKey || process.env.OPENAI_API_KEY,
     temperature: _settings?.customTemperature || 0.9,
     modelName: modelname,
-    maxTokens: _settings?.maxTokens || 800,
+    maxTokens: _settings?.maxTokens || 1000,
   });
 };
+
+export const snowflakeSQLTunePrompt0 = new PromptTemplate({
+  template:
+  "Given the Snowflake database table catalog below, create a JSON response containing: 1. A SQL query to `{goal}` (`main_SQL`); 2. An estimated complexity level of the query from 1 to 5 (`complexity_level`); 3. If the complexity is greater than 3, a proposed SQL query or an EXPLAIN PLAN command to prune the Snowflake database before running the main SQL (`pruning_SQL`). Here's the Snowflake database catalog: `{cata}`",
+  inputVariables: ["goal", "cata"],
+});
+
+export const snowflakeSQLTunePrompt1 = new PromptTemplate({
+  template:
+  "Given the results of the pruning SQL query and the Snowflake database table catalog, create a JSON response containing: 1. A fine-tuned SQL query to `{goal}` (`main_SQL`); 2. An estimated complexity level of the new query from 1 to 5 (`complexity_level`); 3. If the complexity is still greater than 3, a new proposed SQL query or an EXPLAIN PLAN command to further prune the Snowflake database (`pruning_SQL`). Here's the Snowflake database catalog and the results from the pruning SQL query: `{cata}`...`{pres}`",
+  inputVariables: ["goal", "cata", "pres"],
+});
 
 export const snowflakeSQLPrompt = new PromptTemplate({
   template:
