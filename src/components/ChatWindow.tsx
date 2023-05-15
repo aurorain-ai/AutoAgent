@@ -395,7 +395,7 @@ const getMessagePrefix = (message: Message) => {
   const [ t ] = useTranslation();
   switch (message.type) {
     case "goal":
-      return 'Run:';
+      return 'Ask:';
     case "task":
       return 'Task:';
     case "sql":

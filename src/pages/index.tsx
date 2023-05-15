@@ -206,7 +206,7 @@ const Home: NextPage = () => {
                 className="sm:mt-10"
               >
                 {agent == null ? (
-                  t("Run")
+                  t("Ask")
                 ) : (
                   <>
                     <VscLoading className="animate-spin" size={20} />
