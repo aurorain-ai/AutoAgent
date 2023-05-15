@@ -34,7 +34,7 @@ const handler = async (request: NextRequest) => {
       console.log("AgentService.sqlTuneAgent:", t_res);
       sqlStmt = t_res.main_SQL;
       comp_level = t_res.complexity_level;
-      if (comp_level >= COMP_LEVEL_THRESHOLD) {
+      if (comp_level >= COMP_LEVEL_THRESHOLD && t_res.pruning_SQL) {
         console.log("sqlTuneAgent: query pruning_SQL: ", t_res.pruning_SQL);
         pruning_result = await querySnowflakeAPI(t_res.pruning_SQL)
       }
