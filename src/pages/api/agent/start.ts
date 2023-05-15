@@ -33,7 +33,7 @@ const handler = async (request: NextRequest) => {
       console.time("AgentService.sqlTuneAgent1");
       const t_res = await AgentService.sqlTuneAgent(modelSettings, goal, pruning_result);
       console.timeEnd("AgentService.sqlTuneAgent1");
-      console.log("AgentService.sqlTuneAgent:", t_res);
+      // console.log("AgentService.sqlTuneAgent:", t_res);
       sqlStmt = t_res.main_SQL;
       comp_level = t_res.complexity_level;
       if (comp_level >= COMP_LEVEL_THRESHOLD && t_res.pruning_SQL) {
@@ -48,7 +48,7 @@ const handler = async (request: NextRequest) => {
     console.time("querySnowflakeAPI3");
     let data = await querySnowflakeAPI(sqlStmt);
     console.timeEnd("querySnowflakeAPI3");
-    console.log("querySnowflakeAPI return:", data);
+    // console.log("querySnowflakeAPI return:", data);
 
     // step 4: Fine-tune SQL again for query failures
     if (data && typeof data === 'object' && data.error) {
