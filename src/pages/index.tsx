@@ -14,6 +14,7 @@ import { VscLoading } from "react-icons/vsc";
 import AutonomousAgent from "../components/AutonomousAgent";
 import Expand from "../components/motions/expand";
 import HelpDialog from "../components/HelpDialog";
+import DSDialog from "../components/DSDialog";
 import { SettingsDialog } from "../components/SettingsDialog";
 import { TaskWindow } from "../components/TaskWindow";
 import { useAuth } from "../hooks/useAuth";
@@ -33,6 +34,7 @@ const Home: NextPage = () => {
   const [shouldAgentStop, setShouldAgentStop] = React.useState(false);
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [showHelpDialog, setShowHelpDialog] = React.useState(false);
+  const [showDSDialog, setShowDSDialog] = React.useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = React.useState(false);
   const [hasSaved, setHasSaved] = React.useState(false);
   const agentUtils = useAgent();
@@ -127,10 +129,15 @@ const Home: NextPage = () => {
         show={showSettingsDialog}
         close={() => setShowSettingsDialog(false)}
       />
+      <DSDialog
+        show={showDSDialog}
+        close={() => setShowDSDialog(false)}
+      />
       <main className="flex min-h-screen flex-row">
         <Drawer
           showHelp={() => setShowHelpDialog(true)}
           showSettings={() => setShowSettingsDialog(true)}
+          showDS={() => setShowDSDialog(true)}
         />
         <div
           id="content"

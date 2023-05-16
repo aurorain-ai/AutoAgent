@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import {
   FaBars,
+  FaCloud,
   FaCog,
   FaDiscord,
   FaGithub,
@@ -25,9 +26,11 @@ import { signIn } from "next-auth/react";
 const Drawer = ({
   showHelp,
   showSettings,
+  showDS,
 }: {
   showHelp: () => void;
   showSettings: () => void;
+  showDS: () => void;
 }) => {
   const [t] = useTranslation();
   const [showDrawer, setShowDrawer] = useState(true);
@@ -118,14 +121,14 @@ const Drawer = ({
               )
             )}
 
-            {status === "unauthenticated" && (
+            {false && status === "unauthenticated" && (
               <div>
                 {t(
                   "Sign in to be able to configure data sources and manage your account!"
                 )}
               </div>
             )}
-            {status === "authenticated" && userAgents.length === 0 && (
+            {false && status === "authenticated" && userAgents.length === 0 && (
               <div>
                 {t(
                   "You need to configure to connect a data source before anything shows up here!"
@@ -148,7 +151,14 @@ const Drawer = ({
           {env.NEXT_PUBLIC_FF_AUTH_ENABLED && (
             <AuthItem session={session} signIn={signIn} signOut={signOut} />
           )}
-          <DrawerItem icon={<FaCog />} text="Settings" onClick={showSettings} />
+          <DrawerItem
+            icon={<FaCog />}
+            text="Settings"
+            onClick={showSettings} />
+          <DrawerItem
+            icon={<FaCloud />}
+            text="Data Sources"
+            onClick={showDS} />
           <DrawerItem
             icon={<FaQuestionCircle />}
             text={t("Help")}
