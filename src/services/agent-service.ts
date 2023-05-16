@@ -75,7 +75,7 @@ async function sqlTuneAgent(modelSettings: ModelSettings, goal: string, pres?: s
     });
   }
 
-  console.log("sqlTuneAgent:", completion);
+  console.log("sqlTuneAgent: ", completion);
   return JSON.parse(completion.text as string);
 }
 

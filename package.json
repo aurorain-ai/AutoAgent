@@ -8,7 +8,7 @@
   "scripts": {
     "build": "next build --no-lint",
     "dev": "next dev",
-    "dev:custom": "tsc src/server/snowflake.ts && ts-node-dev --respawn --transpile-only custom-server/server.ts",
+    "dev:custom": "tsc --outDir dist src/server/snowflake.ts && ts-node-dev --respawn --transpile-only --ignore-watch '.next/*' custom-server/server.ts",
     "dev:all": "concurrently \"npm run dev:custom\" \"npm run dev\"",
     "postinstall": "prisma generate",
     "lint": "cross-env SKIP_ENV_VALIDATION=1 next lint",
@@ -47,7 +47,7 @@
     "langchain": "^0.0.63",
     "micro": "^10.0.1",
     "micro-cors": "^0.1.1",
-    "next": "13.1.6",
+    "next": "^13.4.2",
     "next-auth": "^4.19.0",
     "next-connect": "^0.13.0",
     "next-i18next": "^13.2.2",

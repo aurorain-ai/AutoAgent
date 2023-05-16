@@ -47,3 +47,9 @@ yarn-error.log*
 /public/locales/$LOCALES
 
 .eslintcache
+
+# snowflake
+dist/snowflake.js
+dist/snowflake-service.js
+dist/query-opstats.js
+
