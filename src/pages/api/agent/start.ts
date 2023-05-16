@@ -13,6 +13,29 @@ export const config = {
   runtime: "edge",
 };
 
+const fineTuneSql = async (modelSettings: any, goal: any) => {
+  let num = 0;
+  let sqlStmt;
+  let pruning_result;
+  let comp_level = COMP_LEVEL_THRESHOLD;
+  while (num++ < MAX_TUNING && comp_level >= COMP_LEVEL_THRESHOLD) {
+    console.log("Running sqlTuneAgent: ", num);
+    console.time("AgentService.sqlTuneAgent1");
+    const t_res = await AgentService.sqlTuneAgent(modelSettings, goal, pruning_result);
+    console.timeEnd("AgentService.sqlTuneAgent1");
+    // console.log("AgentService.sqlTuneAgent:", t_res);
+    sqlStmt = t_res.main_SQL;
+    comp_level = t_res.complexity_level;
+    if (comp_level >= COMP_LEVEL_THRESHOLD && t_res.pruning_SQL) {
+      console.log("sqlTuneAgent: query pruning_SQL: ", t_res.pruning_SQL);
+      console.time("querySnowflakeAPI1");
+      pruning_result = await querySnowflakeAPI(t_res.pruning_SQL)
+      console.timeEnd("querySnowflakeAPI1");
+    }
+  }
+  return sqlStmt;
+}
+
 const handler = async (request: NextRequest) => {
 
   console.log("startHandler---");
@@ -24,25 +47,7 @@ const handler = async (request: NextRequest) => {
     console.log("startHanlder statement:", goal);
 
     // step 2: fine-tune SQL for understanding ops
-    let num = 0;
-    let sqlStmt;
-    let pruning_result;
-    let comp_level = COMP_LEVEL_THRESHOLD;
-    while (num++ < MAX_TUNING && comp_level >= COMP_LEVEL_THRESHOLD) {
-      console.log("Running sqlTuneAgent: ", num);
-      console.time("AgentService.sqlTuneAgent1");
-      const t_res = await AgentService.sqlTuneAgent(modelSettings, goal, pruning_result);
-      console.timeEnd("AgentService.sqlTuneAgent1");
-      // console.log("AgentService.sqlTuneAgent:", t_res);
-      sqlStmt = t_res.main_SQL;
-      comp_level = t_res.complexity_level;
-      if (comp_level >= COMP_LEVEL_THRESHOLD && t_res.pruning_SQL) {
-        console.log("sqlTuneAgent: query pruning_SQL: ", t_res.pruning_SQL);
-        console.time("querySnowflakeAPI1");
-        pruning_result = await querySnowflakeAPI(t_res.pruning_SQL)
-        console.timeEnd("querySnowflakeAPI1");
-      }
-    }
+    let sqlStmt = await fineTuneSql(modelSettings, goal);
 
     // step 3: query snowflake
     console.time("querySnowflakeAPI3");
