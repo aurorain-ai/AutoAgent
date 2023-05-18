@@ -51,10 +51,10 @@ export const snowflakeCacheTuningPrompt = new PromptTemplate({
 
 export const cachedTables = `
   [
-    // {
-    //   TABLE_CATALOG: 'SNOWFLAKE_SAMPLE_DATA',
-    //   TABLE_SCHEMA: 'TPCH_SF1',
-    // },
+    {
+      TABLE_CATALOG: 'SNOWFLAKE_SAMPLE_DATA',
+      TABLE_SCHEMA: 'TPCH_SF1',
+    },
     {
       TABLE_NAME: 'PARTSUPP',
       COLUMNS: 'PS_AVAILQTY, PS_COMMENT, PS_PARTKEY, PS_SUPPKEY, PS_SUPPLYCOST'

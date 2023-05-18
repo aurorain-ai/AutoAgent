@@ -13,6 +13,18 @@ export const config = {
   runtime: "edge",
 };
 
+function isSQLOptRequest(text: string | null | undefined) {
+  if (!text || text.trim().length === 0) {
+      return false;
+  }
+  let trimmedText = text.trim().toLowerCase();
+  if (trimmedText.startsWith('opt:') || trimmedText.startsWith('ops:') || trimmedText.startsWith('optim')) {
+      return true;
+  } else {
+      return false;
+  }
+}
+
 const fineTuneSql = async (modelSettings: any, goal: any) => {
   let num = 0;
   let sqlStmt;
@@ -47,25 +59,35 @@ const handler = async (request: NextRequest) => {
     console.log("startHanlder statement:", goal);
 
     // step 2: fine-tune SQL for understanding ops
-    let sqlStmt = await fineTuneSql(modelSettings, goal);
+    let sqlStmt;
+
+    if (isSQLOptRequest(goal)) {
+      sqlStmt = await fineTuneSql(modelSettings, goal);
+    }
+    else {
+      console.time("AgentService.sqlQueryAgent1");
+      // Based on test result, AgentService.sqlQueryAgent is 2~3 times faster than AgentService.sqlTuneAgent.
+      // The speed is likely related to the question numbers since sqlQueryAgent has one question but sqlTuneAgent has three.
+      sqlStmt = await AgentService.sqlQueryAgent(modelSettings, goal);
+      console.timeEnd("AgentService.sqlQueryAgent1");
+    }
 
     // step 3: query snowflake
     console.time("querySnowflakeAPI3");
     let data = await querySnowflakeAPI(sqlStmt);
     console.timeEnd("querySnowflakeAPI3");
-    // console.log("querySnowflakeAPI return:", data);
 
     // step 4: Fine-tune SQL again for query failures
     if (data && typeof data === 'object' && data.error) {
-      console.error("Fine-tuning for querySnowflakeAPI error: ", data.error);
+      console.error("Fine-tuning for querySnowflakeAPI error: ", data);
 
       // step 4.1 get_query_operator_stats
       const queryOpsStats = await getQueryOperatorStats();
 
       // step 4.2: fine-tune SQL from LLM
-      console.time("AgentService.sqlQueryAgent1");
+      console.time("AgentService.sqlQueryAgent5");
       let newSQLStmt = await AgentService.sqlQueryAgent(modelSettings, goal, sqlStmt, data.error, queryOpsStats);
-      console.timeEnd("AgentService.sqlQueryAgent1");
+      console.timeEnd("AgentService.sqlQueryAgent5");
       console.log("AgentService.sqlQueryAgent fine tuned:", newSQLStmt);
 
       const newSQL = newSQLStmt.trim().toLowerCase();
