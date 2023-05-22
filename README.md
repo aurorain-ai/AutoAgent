@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/aurorain-ai/DataGPT/public/AutoAgent.png" height="200"/>
+  <img src="https://github.com/aurorain-ai/AutoAgent/blob/a379b179e93d244f6e469a636f14ece845b331aa/public/AutoAgent.png" height="200"/>
 </p>
 <p align="center">
   <em>🤖 Auto Agent for data science and AI engineering. 🤖 </em>
@@ -47,7 +47,7 @@ More Coming soon...
 
 ### 🐳 Docker Setup
 
-The easiest way to run DataGPT locally is by using docker.
+The easiest way to run AutoAgent locally is by using docker.
 A convenient setup script is provided to help you get started.
 
 ```bash
@@ -56,7 +56,7 @@ A convenient setup script is provided to help you get started.
 
 ### 👷 Local Development Setup
 
-If you wish to develop DataGPT locally, the easiest way is to
+If you wish to develop AutoAgent locally, the easiest way is to
 use the provided setup script.
 
 ```bash
