@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://github.com/aurorain-ai/DataGPT/blob/3a1afa1fefa5784a41243e2ebfc5c0971cd842f7/public/DataGPT.png" height="200"/>
+  <img src="https://github.com/aurorain-ai/DataGPT/public/AutoAgent.png" height="200"/>
 </p>
 <p align="center">
-  <em>🤖 AI copilot for data analytics, data engineering, and ML science. 🤖 </em>
+  <em>🤖 Auto Agent for data science and AI engineering. 🤖 </em>
 </p>
 
 <p align="center">
-<a href="https://datagpt.auroain.ai">🔗 Short link</a>
+<a href="https://autoagent.auroain.ai">🔗 Short link</a>
 <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
 <a href="https://twitter.com/luhuihu">🐦 Twitter</a>
 </p>
@@ -17,7 +17,7 @@
 
 ---
 
-DataGPT is AI copilot for data analytics, data engineering, and ML science. 🚀.
+AutoAgent is an AI sandbox (no agent) for data science and AI engineering. 🚀.
 
 ## 🎉 Roadmap
 
@@ -70,19 +70,19 @@ use the provided setup script.
 1. Clone the repository:
 
 ```bash
-git clone git@github.com:aurorain-ai/DataGPT.git
+git clone git@github.com:aurorain-ai/AutoAgent.git
 ```
 
 2. Install dependencies:
 
 ```bash
-cd DataGPT
+cd AutoAgent
 npm install
 ```
 
 3. Create a **.env** file with the following content:
 
-> 🚧 The environment variables must match the following [schema](https://github.com/aurorain-ai/DataGPT/blob/main/src/env/schema.mjs).
+> 🚧 The environment variables must match the following [schema](https://github.com/aurorain-ai/AutoAgent/blob/main/src/env/schema.mjs).
 
 ```bash
 # Deployment Environment:
@@ -125,7 +125,7 @@ npm run dev:all
 
 ### 🚀 GitHub Codespaces
 
-Set up AgentGPT in the cloud immediately by using [GitHub Codespaces](https://github.com/features/codespaces).
+Set up AutoAgent in the cloud immediately by using [GitHub Codespaces](https://github.com/features/codespaces).
 
 1. From the GitHub repo, click the green "Code" button and select "Codespaces".
 2. Create a new Codespace or select a previous one you've already created.
@@ -134,8 +134,8 @@ Set up AgentGPT in the cloud immediately by using [GitHub Codespaces](https://gi
 5. When prompted in terminal, add your OpenAI API key.
 6. Click "Open in browser" when the build process completes.
 
-- To shut AgentGPT down, enter Ctrl+C in Terminal.
-- To restart AgentGPT, run `npm run dev` in Terminal.
+- To shut AutoAgent down, enter Ctrl+C in Terminal.
+- To restart AutoAgent, run `npm run dev:all` in Terminal.
 
 Run the project 🥳
 
